@@ -32,7 +32,6 @@ class Core {
         $fragments=explode('/',$url);
         return $fragments;
         }
-        else echo 'Greska sa Url!';
     }
 
 }
