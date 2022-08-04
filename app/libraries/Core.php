@@ -5,6 +5,7 @@ class Core {
     protected $params = array();
     public function __construct(){
         $url=$this->getUrl();
+
          if(isset($url[0])){
             $controller=strtolower($url[0]);
             $controller=ucfirst($controller);
@@ -14,6 +15,7 @@ class Core {
             unset($url[0]);
         }
         }
+        
         $path='../app/controllers/' . $this->currentController . '.php';
         require_once $path;
         $class=new $this->currentController;
