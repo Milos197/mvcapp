@@ -59,4 +59,8 @@ class Db{
         $this->execute();
         return $this->stmt->fetch(PDO::FETCH_OBJ);
     }
+    
+    public function count(){
+        return $this->stmt->rowCount();
+    }
 }
