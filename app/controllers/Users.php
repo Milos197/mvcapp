@@ -1,9 +1,57 @@
 <?php
 class Users extends Controller{
 public function login(){
+    isLoggedIn('/users/profile');
+    
+    if($_SERVER['REQUEST_METHOD']==='POST'){
+        $data=[
+            'email'=>$_POST['email'],
+            'password'=>$_POST['password']
+        ];
+
+
+        $error=[
+            'email_error'=>'',
+            'password_error'=>''
+        ];
+
+
+        if(empty($data['email'])){
+        $error['email_error']='Email is required';
+        }
+        else{
+            if(!($this->model('User')->findUserByEmail($data['email']))){
+                $error['email_error']='Email is not registered';
+            }
+
+        }
+        if(empty($data['password'])){
+            $error['password_error']='Password is required';
+        }
+        if($error['email_error']==''&&$error['password_error']==''){
+        $user=$this->model('User')->getUserByEmail($data['email']);
+        if(!password_verify($data['password'],$user->password)){
+            $error['password_error']='You entered wrong password';
+        }
+    }
+        
+        if($error['email_error']==''&&$error['password_error']==''){
+            header('Location: /users/profile');
+            $_SESSION['id']=$user->id;
+            $_SESSION['firstName']=$user->firstName;
+            $_SESSION['email']=$user->email;
+        }
+        else{
+        $this->view('users/login',array_merge($data,$error));
+        }
+    }
+    else{
     $this->view('users/login');
+    }
+
 }
 public function register(){ 
+    isLoggedIn('/users/profile');
     if($_SERVER['REQUEST_METHOD']==='POST'){
 
 
@@ -21,7 +69,7 @@ public function register(){
             'password_error'=>'',
             'passwordRep_error'=>'',
         ];
-
+        
 
         if(empty($data['firstName']))
         $error['firstName_error']='First name is required';
@@ -76,5 +124,13 @@ public function register(){
     else {
         $this->view('users/register');
     }
+}
+public function profile(){
+    $this->view('users/profile');
+}
+public function logout(){
+    isNotLoggedIn('users/login');
+    session_destroy();
+    header('Location: /users/login');
 }
 }

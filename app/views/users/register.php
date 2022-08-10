@@ -1,7 +1,7 @@
 <form method="POST">
     <div>
         <label for="firstName">First name:</label>
-        <input type="name" id="firstName" name="firstName" 
+        <input required type="name" id="firstName" name="firstName" 
         value="<?php echo $data['firstName'] ?? null ?>">
         <?php echo $data['firstName_error'] ?? null ?>
     </div>

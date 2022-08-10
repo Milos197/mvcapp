@@ -22,4 +22,11 @@ class User{
             $this->db->single();
             return $this->db->count();
     }
+
+    public function getUserByEmail($email){
+        $sql='select * from users where email=:email';
+        $this->db->query($sql);
+        $this->db->bind(':email',$email);
+        return ($this->db->single());
+    }
 }
