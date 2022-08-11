@@ -5,7 +5,21 @@
 <ul>
     <?php foreach($data['posts'] as $post):?>
         <li>
-           <?php echo $post->title?>
+            <ul>
+                <li>
+                <?php echo $post->title?>
+                </li>
+                <li>
+                <?php echo substr($post->body,0,100)?>
+                </li>
+                <li>
+                <?php echo $post->createdBy?>
+                </li>
+                <li>
+                <?php echo $post->createdAt?>
+                </li>
+            </ul>
+           
         </li>
         <?php endforeach;?>
 </ul>

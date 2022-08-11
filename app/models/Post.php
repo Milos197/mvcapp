@@ -5,15 +5,59 @@ class Post{
         $this->db=new Db();
     }
 
+
+
     public function getPosts(){
         $sql='select * from posts';
         $this->db->query($sql);
         return $this->db->collection();
     }
+
+
     public function getSinglePost($id){
         $sql='select * from posts where id=:id';
         $this->db->query($sql);
         $this->db->bind(':id',$id);
         return $this->db->single();
+    }
+
+
+
+    public function createNewPost($title,$body,$status,$createdBy){
+        $sql='insert into posts (title,body,status,createdBy) values 
+        (:title,:body,:status,:createdBy)';
+        $this->db->query($sql);
+        $this->db->bind(':title',$title);
+        $this->db->bind(':body',$body);
+        $this->db->bind(':status',$status);
+        $this->db->bind(':createdBy',$createdBy);
+        return $this->db->execute();
+    }
+
+
+    public function getPostsById($createdBy){
+        $sql='select * from posts where createdBy=:createdBy';
+        $this->db->query($sql);
+        $this->db->bind(':createdBy',$createdBy);
+        return $this->db->collection();
+    }
+
+    public function delete($id){
+        $sql='delete from posts where id=:id';
+        $this->db->query($sql);
+        $this->db->bind(':id',$id);
+        $this->db->execute();
+    }
+
+    public function edit($id,$title,$body,$status,$editedAt){
+        $sql='update posts set body=:body where id=:id';
+        $this->db->query($sql);
+        $this->db->bind(':title',$title);
+        $this->db->bind(':body',$body);
+        $this->db->bind(':status',$status);
+        $this->db->bind(':editedAt',$editedAt);
+        $this->db->bind(':id',$id);
+        var_dump($body);
+        $this->db->execute();
     }
 }

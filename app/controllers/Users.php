@@ -126,7 +126,9 @@ public function register(){
     }
 }
 public function profile(){
-    $this->view('users/profile');
+    $posts=$this->model('Post')->getPostsById($_SESSION['id']);
+    $data=['posts'=>$posts];
+    $this->view('users/profile',$data);
 }
 public function logout(){
     isNotLoggedIn('users/login');
