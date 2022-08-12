@@ -29,4 +29,11 @@ class User{
         $this->db->bind(':email',$email);
         return ($this->db->single());
     }
+
+    public function getUserById($id){
+        $sql='select * from users where id=:id';
+        $this->db->query($sql);
+        $this->db->bind(':id',$id);
+        return $this->db->single();
+    }
 }

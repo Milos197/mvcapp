@@ -50,14 +50,23 @@ class Post{
     }
 
     public function edit($id,$title,$body,$status,$editedAt){
-        $sql='update posts set body=:body where id=:id';
+        $sql='update posts set title=:title,body=:body,status=:status,
+        editedAt=:editedAt where id=:id';
         $this->db->query($sql);
         $this->db->bind(':title',$title);
         $this->db->bind(':body',$body);
         $this->db->bind(':status',$status);
         $this->db->bind(':editedAt',$editedAt);
         $this->db->bind(':id',$id);
-        var_dump($body);
-        $this->db->execute();
+        return $this->db->execute();
+    }
+
+    public function getPublishedPosts(){
+        $status='published';
+        $sql='select * from posts where status=:status order by 
+        createdAt desc';
+        $this->db->query($sql);
+        $this->db->bind(':status',$status);
+        return $this->db->collection();
     }
 }

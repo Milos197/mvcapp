@@ -8,8 +8,8 @@ class Posts extends Controller{
 
     public function show($id=0){
         if($id){
-        $user=$this->model('Post')->getSinglePost($id);
-        $this->view('posts/show',['user'=>$user]);
+        $post=$this->model('Post')->getSinglePost($id);
+        $this->view('posts/show',['post'=>$post]);
         }
         else {
             header("Location: http://localhost:8001/posts");
@@ -58,16 +58,17 @@ class Posts extends Controller{
 
     public function edit($id){
         isNotLoggedIn('/users/login');
-
         $user=$this->model('Post')->getSinglePost($id);
         $data=['user'=>$user];
-        $this->view('posts/edit',$data);
-
+        if($_SERVER['REQUEST_METHOD']==='POST'){
         $error=[
             'title_error'=>'',
             'body_error'=>'',
             'status_error'=>'' 
         ];
+        $data['user']->title=$_POST['title'];
+        $data['user']->body=$_POST['body'];
+        $data['user']->status=$_POST['status'];
 
 
         if(empty($data['user']->title)){
@@ -87,8 +88,12 @@ class Posts extends Controller{
         }
         }
         else{
-        $this->view('posts/create',array_merge($data,$error));
+        $this->view('posts/edit',array_merge($data,$error));
         }
+    }
+    else{
+        $this->view('posts/edit',$data);
+    }
 
 
     }

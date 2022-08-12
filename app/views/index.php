@@ -1,19 +1,17 @@
 <?php require_once '../app/views/layout/header.php';?>
 <h1>Index</h1>
-<?php echo $data['title'];?>
-<h2><?php echo $data['message'];?></h2>
 <ul>
-    <?php foreach($data['posts'] as $post):?>
+    <?php foreach($data as $post):?>
         <li>
+        <a href="/posts/show/<?php echo $post->id ?>"><?php echo $post->title ?></a>
             <ul>
-                <li>
-                <?php echo $post->title?>
-                </li>
                 <li>
                 <?php echo substr($post->body,0,100)?>
                 </li>
                 <li>
-                <?php echo $post->createdBy?>
+                <?php
+                $user=$this->model('User')->getUserById($post->createdBy);
+                echo $user->firstName;?>
                 </li>
                 <li>
                 <?php echo $post->createdAt?>

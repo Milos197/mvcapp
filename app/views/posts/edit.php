@@ -1,3 +1,4 @@
+<?php require_once '../app/views/layout/header.php';?>
 <form method="post">
     <div>
         <label for="title">Title:</label>
