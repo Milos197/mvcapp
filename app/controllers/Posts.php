@@ -1,6 +1,7 @@
 <?php
 class Posts extends Controller{
     public function index(){
+        isNotLoggedIn('/users/login');
         $posts=$this->model('Post')->getPosts();
         $data=['title'=>'Welcome','message'=>'Hello World','posts'=>$posts];
         $this->view('posts/index',$data);
@@ -10,6 +11,7 @@ class Posts extends Controller{
         if($id){
         $post=$this->model('Post')->getSinglePost($id);
         $this->view('posts/show',['post'=>$post]);
+        
         }
         else {
             header("Location: http://localhost:8001/posts");
@@ -101,7 +103,10 @@ class Posts extends Controller{
 
     public function delete($id){
         isNotLoggedIn('/users/login');
+
         $this->model('Post')->delete($id);
+
         header('Location: /users/profile');
     }
+
 }

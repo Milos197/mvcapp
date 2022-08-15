@@ -12,7 +12,4 @@ header
 if(isset($_SESSION['id'])){
     echo $_SESSION['firstName'];
     echo '<a href="/users/logout">Logout</a>';
-}    
-else{
-    header('Location: /users/login');
-}
+ }    
