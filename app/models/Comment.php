@@ -18,9 +18,9 @@ class Comment{
     }
 
     public function getCommentsByPostId($id){
-        $sql='select * from comments where :postId=postId';
+        $sql='select * from comments where :postId=postId order by createdAt desc';
         $this->db->query($sql);
-        $this->db->bind(':postId',$postId);
+        $this->db->bind(':postId',$id);
         return $this->db->collection();
     }
 

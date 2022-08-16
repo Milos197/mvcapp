@@ -5,12 +5,10 @@ class Comments extends Controller{
     }
 
     public function create(){
-        isNotLoggedIn('/users/login');
-        var_dump($id);
         if($_SERVER['REQUEST_METHOD']==='POST'){
             $data=[
             'userId'=>$_SESSION['id'],
-            'postId'=>$id,
+            'postId'=>$_POST['postId'],
             'body'=>$_POST['body']
             ];
         
@@ -25,10 +23,10 @@ class Comments extends Controller{
             if($error['body_error']===''){
             if($this->model('Comment')->add($data['userId'],
             $data['postId'],$data['body']))
-            header('Location: /posts/show');
+            header("Location: /posts/show/" . $data['postId']);
         }
         else{
-            $this->view('/posts/show',array_merge($data,$error));
+            header("Location: /posts/show/". $data['postId']);
         }
 
         }

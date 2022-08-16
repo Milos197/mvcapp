@@ -11,7 +11,6 @@ class Posts extends Controller{
         if($id){
         $post=$this->model('Post')->getSinglePost($id);
         $this->view('posts/show',['post'=>$post]);
-        
         }
         else {
             header("Location: http://localhost:8001/posts");
@@ -20,6 +19,7 @@ class Posts extends Controller{
     }
     public function create(){
         isNotLoggedIn('/users/login');
+        $categories=$this->model('Category')->getAllCategories();
         if($_SERVER['REQUEST_METHOD']==='POST'){
         $data=[
             'title'=>$_POST['title'],

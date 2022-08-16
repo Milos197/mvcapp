@@ -24,6 +24,15 @@
             <option value="published">published</option>
         </select>
     </div>
+    
+    <br>
+
+    <div>
+        <label for="category">Categories:</label>
+        <select name="category" id="category" multiple="multiple">
+
+        </select>
+    </div>
 
     <br>
 

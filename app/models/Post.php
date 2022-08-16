@@ -15,10 +15,13 @@ class Post{
 
 
     public function getSinglePost($id){
-        $sql='select * from posts where id=:id';
+        $sql='select c.createdAt as commentCreatedAt, p.title, p.status,
+        p.id, c.body, c.userId, p.createdBy from posts as p inner join 
+        comments as c on p.id=c.postId
+         where p.id=:id';
         $this->db->query($sql);
         $this->db->bind(':id',$id);
-        return $this->db->single();
+        return $this->db->collection();
     }
 
 
