@@ -63,4 +63,8 @@ class Db{
     public function count(){
         return $this->stmt->rowCount();
     }
+
+    public function getLastInsertId(){
+        return $this->pdo->lastInsertId();
+    }
 }

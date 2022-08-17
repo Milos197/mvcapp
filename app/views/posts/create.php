@@ -29,8 +29,10 @@
 
     <div>
         <label for="category">Categories:</label>
-        <select name="category" id="category" multiple="multiple">
-
+        <select name="category[]" id="category" multiple="multiple">
+            <?php foreach($data as $category):?>
+                <option value="<?php echo $category->id ?>"><?php echo $category->title ?></option>
+            <?php endforeach; ?>
         </select>
     </div>
 

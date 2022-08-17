@@ -19,11 +19,20 @@ class Categories extends Controller{
         if(empty($data['title'])){
             $error['error']='Title is required';
         }
+        else{
+            if($this->model('Category')->checkCategories($data['title']))
+            {
+            $error['error']='This category already exists';
+            }
+        }
         if($error['error']==='')
         {
             if($this->model('Category')->add($data['title'])){
                 header('Location: /index');
             }
+        }
+        else{
+            $this->view('categories/create',array_merge($data,$error));
         }
         }
         else{

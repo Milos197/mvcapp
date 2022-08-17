@@ -27,37 +27,50 @@ class Posts extends Controller{
             'status'=>$_POST['status'],
             'createdBy'=>$_SESSION['id']
         ];
+        $category=$_POST['category'];
+        
         $error=[
             'title_error'=>'',
             'body_error'=>'',
-            'status_error'=>'' 
+            'status_error'=>'',
+            'category_error'=>''
         ];
 
-        if(empty($data['title'])){
-        $error['title_error']='Title is required';
-        }
+         if(empty($data['title'])){
+         $error['title_error']='Title is required';
+         }
 
-        if(empty($data['body'])){
-            $error['body_error']='Body is required';
-        }
+         if(empty($data['body'])){
+             $error['body_error']='Body is required';
+         }
 
-        if($error['title_error']===''&&$error['body_error']===''){
-            if($this->model('Post')->createNewPost($data['title'],
-            $data['body'],$data['status'],$data['createdBy']))
-        {
+         if(empty($category)){
+             $error['category_error']='Category is required';
+         }
+
+
+
+         if($error['title_error']===''&&$error['body_error']===''
+         &&$error['category_error']===''){
+             if($post=$this->model('Post')->createNewPost($data['title'],
+             $data['body'],$data['status'],$data['createdBy']))
+         {
+            foreach($category as $cat){
+                $this->model('Post')->addNewPostCategory($post,$cat);
+            }
             header('Location: /users/profile');
-        }
-        }
-        else{
-        $this->view('posts/create',array_merge($data,$error));
-        }
+         }
+         }
+         else{
+         $this->view('posts/create',array_merge($data,$error,$categories));
+         }
     
     }
         else{
-            $this->view('posts/create');
+            $this->view('posts/create',$categories);
         }
     }
-
+    
     public function edit($id){
         isNotLoggedIn('/users/login');
         $user=$this->model('Post')->getSinglePost($id);

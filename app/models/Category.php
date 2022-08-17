@@ -20,4 +20,18 @@ class Category{
         $this->db->query($sql);
         return $this->db->collection();
     }
+
+    public function checkCategories($title){
+        $sql='select * from categories where title=:title';
+        $this->db->query($sql);
+        $this->db->bind(':title',$title);
+        return $this->db->single();
+    }
+
+    public function getCategoryByTitle($title){
+        $sql='select * from categories where title=:title';
+        $this->db->query($sql);
+        $this->db->bind(':title',$title);
+        return $this->db->single();
+    }
 }

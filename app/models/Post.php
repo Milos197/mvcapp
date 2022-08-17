@@ -34,9 +34,9 @@ class Post{
         $this->db->bind(':body',$body);
         $this->db->bind(':status',$status);
         $this->db->bind(':createdBy',$createdBy);
-        return $this->db->execute();
+        $this->db->execute();
+        return $this->db->getLastInsertId();
     }
-
 
     public function getPostsById($createdBy){
         $sql='select * from posts where createdBy=:createdBy';
@@ -71,5 +71,15 @@ class Post{
         $this->db->query($sql);
         $this->db->bind(':status',$status);
         return $this->db->collection();
+    }
+    
+
+    public function addNewPostCategory($postId,$categoryId){
+        $sql='insert into posts_categories (postId,categoryId) values
+        (:postId,:categoryId)';
+        $this->db->query($sql);
+        $this->db->bind(':postId',$postId);
+        $this->db->bind(':categoryId',$categoryId);
+        return $this->db->single();
     }
 }
