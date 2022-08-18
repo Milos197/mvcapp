@@ -2,8 +2,8 @@
     <div>
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" placeholder="Title"
-        value="<?php echo $data['title'] ?? null  ?>">
-        <?php echo $data['title_error'] ?? null ?>
+        value="<?php echo $data['data']['title'] ?? null  ?>">
+        <?php echo $data['error']['title_error'] ?? null ?>
     </div>
 
     <br>
@@ -11,8 +11,8 @@
     <div>
         <label for="body">Body:</label>
         <input type="text" id="body" name="body" placeholder="Body"
-        value="<?php echo $data['body'] ?? null ?>">
-        <?php echo $data['body_error'] ?? null ?>
+        value="<?php echo $data['data']['body'] ?? null ?>">
+        <?php echo $data['error']['body_error'] ?? null ?>
     </div>
     
     <br>
@@ -30,10 +30,11 @@
     <div>
         <label for="category">Categories:</label>
         <select name="category[]" id="category" multiple="multiple">
-            <?php foreach($data as $category):?>
+            <?php foreach($data['categories'] as $category):?>
                 <option value="<?php echo $category->id ?>"><?php echo $category->title ?></option>
             <?php endforeach; ?>
         </select>
+        <?php echo $data['error']['category_error'] ?? null ?>
     </div>
 
     <br>

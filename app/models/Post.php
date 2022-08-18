@@ -24,6 +24,13 @@ class Post{
         return $this->db->collection();
     }
 
+    public function getSinglePostForEdit($id){
+        $sql='select * from posts where id=:id';
+        $this->db->query($sql);
+        $this->db->bind(':id',$id);
+        return $this->db->single();
+    }
+
 
 
     public function createNewPost($title,$body,$status,$createdBy){
@@ -61,7 +68,8 @@ class Post{
         $this->db->bind(':status',$status);
         $this->db->bind(':editedAt',$editedAt);
         $this->db->bind(':id',$id);
-        return $this->db->execute();
+        $this->db->execute();
+        return $this->db->getLastInsertId();
     }
 
     public function getPublishedPosts(){
@@ -81,5 +89,12 @@ class Post{
         $this->db->bind(':postId',$postId);
         $this->db->bind(':categoryId',$categoryId);
         return $this->db->single();
+    }
+
+    public function removePostsCategories($id){
+        $sql='delete from posts_categories where postId=:postId';
+        $this->db->query($sql);
+        $this->db->bind(':postId',$id);
+        return $this->db->execute();
     }
 }

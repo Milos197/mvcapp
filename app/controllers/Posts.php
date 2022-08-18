@@ -27,8 +27,12 @@ class Posts extends Controller{
             'status'=>$_POST['status'],
             'createdBy'=>$_SESSION['id']
         ];
+        if(isset($_POST['category'])){
         $category=$_POST['category'];
-        
+        }
+        else{
+        $category=[];
+        }
         $error=[
             'title_error'=>'',
             'body_error'=>'',
@@ -62,29 +66,46 @@ class Posts extends Controller{
          }
          }
          else{
-         $this->view('posts/create',array_merge($data,$error,$categories));
+            $view=[
+                'data'=>$data,
+                'error'=>$error,
+                'categories'=>$categories
+            ];
+         $this->view('posts/create',array_merge($view));
          }
     
     }
         else{
-            $this->view('posts/create',$categories);
+            $view=[
+                'categories'=>$categories
+            ];
+            $this->view('posts/create',$view);
         }
     }
     
     public function edit($id){
         isNotLoggedIn('/users/login');
-        $user=$this->model('Post')->getSinglePost($id);
+        $categories=$this->model('Category')->getAllCategories();
+        $user=$this->model('Post')->getSinglePostForEdit($id);
         $data=['user'=>$user];
         if($_SERVER['REQUEST_METHOD']==='POST'){
         $error=[
             'title_error'=>'',
             'body_error'=>'',
-            'status_error'=>'' 
+            'status_error'=>'',
+            'category_error'=>''
         ];
+
         $data['user']->title=$_POST['title'];
         $data['user']->body=$_POST['body'];
         $data['user']->status=$_POST['status'];
-
+        
+        if(isset($_POST['category'])){
+            $category=$_POST['category'];
+            }
+            else{
+            $category=[];
+            }
 
         if(empty($data['user']->title)){
             $error['title_error']='Title is required';
@@ -93,21 +114,37 @@ class Posts extends Controller{
         if(empty($data['user']->body)){
             $error['body_error']='Body is required';
         } 
-        
-        if($error['title_error']===''&&$error['body_error']===''){
+        if(empty($category)){
+            $error['category_error']='Category is required';
+        }
+        if($error['title_error']===''&&$error['body_error']===''&&
+        $error['category_error']===''){
             $data['user']->editedAt=date('d-m-y h:i:s');
-            if($this->model('Post')->edit($id,$data['user']->title,
-            $data['user']->body,$data['user']->status,$data['user']->editedAt))
+            if(!$this->model('Post')->edit($id,$data['user']->title,
+            $data['user']->body,$data['user']->status,$data['user']->editedAt));
         {
+            $this->model('Post')->removePostsCategories($id);
+            foreach($category as $cat){
+                $this->model('Post')->addNewPostCategory($id,$cat);
+            }
             header('Location: /users/profile');
         }
         }
         else{
-        $this->view('posts/edit',array_merge($data,$error));
+        $view=[
+            'data'=>$data,
+            'error'=>$error,
+            'categories'=>$categories
+        ];
+        $this->view('posts/edit',$view);
         }
     }
     else{
-        $this->view('posts/edit',$data);
+        $view=[
+            'data'=>$data,
+            'categories'=>$categories
+        ];
+        $this->view('posts/edit',$view);
     }
 
 
@@ -118,6 +155,7 @@ class Posts extends Controller{
         isNotLoggedIn('/users/login');
 
         $this->model('Post')->delete($id);
+        $this->model('Post')->removePostsCategories($id);
 
         header('Location: /users/profile');
     }
